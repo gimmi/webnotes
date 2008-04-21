@@ -1,0 +1,22 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  url_title: one-simple-page
+  text_body: **Nothing to say**
+
+correct:
+  url_title: test-page
+  text_body: **Hello World!**
+
+another_correct:
+  url_title: another-test-page
+  text_body: **Goodbye World!**
+
+home:
+  url_title: home
+  text_body: Home page [[page-link]]
+
+invalid:
+  url_title: Invalid Page Title
+  text_body: **Goodbye World!**
+    

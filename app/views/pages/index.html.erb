@@ -1,0 +1,7 @@
+<h1>Pages</h1>
+<% for page in @pages %>
+  <%= link_to page.title, page %>, 
+<% end %>
+<%= link_to 'Create new page', new_page_path, :method => :get %>
+
+

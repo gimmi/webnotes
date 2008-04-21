@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>WebNotes</title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <%= stylesheet_link_tag 'default' %>
+    <%= javascript_include_tag :defaults %>
+  </head>
+  <body>
+    <div id="outer">
+      <div id="menu">
+        <ul>
+          <li class="first"><%= link_to('Page list', pages_path, :class => 'first') %></li>
+          <li><%= link_to 'Create new page', new_page_path, :method => :get %></li>
+          <% if defined?(@page) && !@page.new_record? %>
+            <li><%= link_to 'Edit page', edit_page_path(@page), :method => :get %></li>
+            <li><%= link_to 'Delete page', page_path(@page), :confirm => 'Are you sure?', :method => :delete %></li>
+          <% end %>
+          <% if admin? %>
+            <li><%= link_to('Log out', { :controller => 'sessions', :action => 'delete' }, :method => :delete) %></li>
+          <% end %>
+        </ul>
+      </div>
+      <% unless flash.empty? %>
+        <div id="flash">
+          <p class="error"><%= flash[:error] %></p>
+          <p class="notice"><%= flash[:notice] %></p>
+        </div>
+      <% end %>
+      <%= yield  %>
+      <div id="footer">
+        <p>Made with <a href="http://webnotes.rubyforge.org">WebNotes</a></p>
+      </div>
+    </div>
+  </body>
+</html>

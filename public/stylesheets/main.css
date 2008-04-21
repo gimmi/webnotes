@@ -1,0 +1,29 @@
+.edit-page .url-title {
+    width: 100%;
+    font-size: large;
+}
+
+.edit-page .text-body {
+    width: 100%;
+    font-family: monospace;
+}
+
+#notice-flash {
+    background:#B0C6FF none repeat scroll 0%;
+    border-bottom:3px solid #0F48D7;
+    border-top:3px solid #0F48D7;
+    color:#220000;
+    font-weight:bold;
+    margin-bottom:10px;
+    padding:10px;
+}
+
+#error-flash {
+    background: #DD8888 none repeat scroll 0%;
+    border-bottom: 3px solid #FF0000;
+    border-top: 3px solid #FF0000;
+    color: #220000;
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding: 10px;
+}

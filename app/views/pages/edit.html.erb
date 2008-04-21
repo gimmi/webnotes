@@ -1,0 +1,8 @@
+<%= error_messages_for :page %>
+<div id="edit">
+  <% form_for(@page) do |f| %>
+      <%= f.text_field :url_title, :class => 'title' %>
+      <%= f.text_area :text_body, :class => 'body', :onkeyup => 'resizeTextArea(this)' %>
+      <%= f.submit "Save", :class => 'save' %><br />
+  <% end %>
+</div>
