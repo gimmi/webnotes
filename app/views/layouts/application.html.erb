@@ -25,8 +25,12 @@
       </div>
       <% unless flash.empty? %>
         <div id="flash">
-          <p class="error"><%= flash[:error] %></p>
-          <p class="notice"><%= flash[:notice] %></p>
+          <% if flash[:error] %>
+            <p class="error"><%= flash[:error] %></p>
+          <% end %>
+          <% if flash[:notice] %>
+            <p class="notice"><%= flash[:notice] %></p>
+          <% end %>
         </div>
       <% end %>
       <%= yield  %>

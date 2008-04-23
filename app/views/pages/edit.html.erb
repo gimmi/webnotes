@@ -1,4 +1,4 @@
-<%= error_messages_for :page %>
+<%= error_messages_for :page, :id => 'errors', :class => nil %>
 <div id="edit">
   <% form_for(@page) do |f| %>
       <%= f.text_field :url_title, :class => 'title' %>
