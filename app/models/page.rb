@@ -1,4 +1,4 @@
-require 'erb'
+require 'bluecloth'
 
 class Page < ActiveRecord::Base
   URL_TITLE_REGEXP_STRING = '[a-z0-9-]+'
