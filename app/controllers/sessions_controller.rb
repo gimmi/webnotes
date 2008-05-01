@@ -2,7 +2,6 @@ class SessionsController < ApplicationController
   # GET /sessions/new
   def new
     flash.keep :original_uri
-    flash.keep :original_method
   end
 
   # POST /sessions
