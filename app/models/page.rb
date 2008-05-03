@@ -20,6 +20,10 @@ class Page < ActiveRecord::Base
       "<a href=\"#{yield($1)}\">#{Page.titleize_url_title($1)}</a>"
     end
   end
+  
+  def private?
+    !read_attribute(:public)
+  end
 
   def self.titleize_url_title(url_title)
     url_title.titleize

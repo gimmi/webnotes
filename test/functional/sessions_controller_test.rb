@@ -15,7 +15,7 @@ class SessionsControllerTest < ActionController::TestCase
     assert_nil flash[:other]
   end
 
-  def test_create_should_redirect_to_original_uri_if_password_match
+  def test_create_should_redirect_to_original_uri_if_password_match_and_original_uri_found
     flash_hash = ActionController::Flash::FlashHash.new
     flash_hash.now[:original_uri] = '/uri'
 
@@ -23,6 +23,13 @@ class SessionsControllerTest < ActionController::TestCase
     
     assert_equal 'Succesfully logged in.', flash[:notice]
     assert_redirected_to '/uri'
+  end
+  
+  def test_create_should_redirect_to_homepage_uri_if_password_match_and_original_uri_not_found
+    post :create, { :password => ADMIN_PASSWORD }
+    
+    assert_equal 'Succesfully logged in.', flash[:notice]
+    assert_redirected_to ''
   end
   
   def test_create_should_redirect_to_new_session_and_keep_original_uri_if_password_wrong

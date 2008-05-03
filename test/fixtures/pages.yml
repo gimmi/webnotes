@@ -3,11 +3,19 @@
 correct:
   url_title: correct-page
   text_body: Hello world
+  public: true
 
 another_correct:
   url_title: another-test-page
   text_body: **Goodbye World!**
+  public: true
 
 invalid:
   url_title: Invalid Page Title
   text_body: **Goodbye World!**
+  public: true
+
+private:
+  url_title: some-personal-data
+  text_body: My credit card number is 123456
+  public: false

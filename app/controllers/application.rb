@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => '76a31a8856fe6c479a76e63061162a3b'
   
-  helper_method :admin?
+  helper_method :admin?, :guest?
   
   protected
   
@@ -23,6 +23,10 @@ class ApplicationController < ActionController::Base
   
   def admin?
     session[:admin] == true
+  end
+  
+  def guest?
+    !admin?
   end
   
   def login(password)

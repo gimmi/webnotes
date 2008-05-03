@@ -3,16 +3,21 @@ class PagesController < ApplicationController
   
   # GET /pages
   def index
-    @pages = Page.find(:all, :order => 'url_title')
+    conditions = ['public = ?', true] if guest?
+    @pages = Page.find(:all, :order => 'url_title', :conditions => conditions)
   end
   
   # GET /pages/title/url-title
   def title
     @page = Page.find_by_url_title(params[:id])
     if @page
-      @page_title = @page.title
-      @page_body = @page.html_body do |url_title|
-        url_for :action => 'title', :id => url_title, :only_path => true
+      if @page.private? && guest?
+        authorize
+      else
+        @page_title = @page.title
+        @page_body = @page.html_body do |url_title|
+          url_for :action => 'title', :id => url_title, :only_path => true
+        end
       end
     else
       flash[:error] = "Page with title '#{params[:id]}' not found"

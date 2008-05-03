@@ -10,7 +10,7 @@ class PagesControllerTest < ActionController::TestCase
     assert_not_nil flash[:original_uri]
   end
   
-  def test_should_redirect_to_new_session_when_getting_admin_actions
+  def test_should_redirect_to_new_session_when_requesting_admin_actions
     get :new
     assert_login_redirect
 
@@ -25,22 +25,21 @@ class PagesControllerTest < ActionController::TestCase
     
     delete :destroy
     assert_login_redirect
+    
+    get :title, { :id => 'some-personal-data' }
+    assert_login_redirect
   end
   
-  def test_index_should_find_all_pages
-    get :index, {}
+  def test_index_should_find_all_pages_when_authenticated
+    get :index, {}, { :admin => true }
     assert_response :success
-    assert_equal Page.count, assigns(:pages).size
+    assert_equal 4, assigns(:pages).size
   end
   
-  def test_title_should_show_page_if_title_found
-    get :title, :id => 'correct-page'
-
-    assert_template 'title'
+  def test_index_should_find_only_public_pages_when_not_authenticated
+    get :index
     assert_response :success
-    assert_equal 'Correct Page', assigns(:page_title)
-    assert_equal '<p>Hello world</p>', assigns(:page_body)
-    assert_equal pages(:correct), assigns(:page)
+    assert_equal 3, assigns(:pages).size
   end
   
   def test_title_should_redirect_to_pages_path_and_display_message_if_title_not_found
@@ -50,6 +49,36 @@ class PagesControllerTest < ActionController::TestCase
     assert_equal "Page with title 'not-present-page' not found", flash[:error]
   end
 
+  def test_title_should_show_public_page_if_title_found_and_not_authenticated
+    get :title, :id => 'correct-page'
+
+    assert_template 'title'
+    assert_response :success
+    assert_equal 'Correct Page', assigns(:page_title)
+    assert_equal '<p>Hello world</p>', assigns(:page_body)
+    assert_equal pages(:correct), assigns(:page)
+  end
+  
+  def test_title_should_show_public_page_if_title_found_and_authenticated
+    get :title, { :id => 'correct-page' }, { :admin => true }
+
+    assert_template 'title'
+    assert_response :success
+    assert_equal 'Correct Page', assigns(:page_title)
+    assert_equal '<p>Hello world</p>', assigns(:page_body)
+    assert_equal pages(:correct), assigns(:page)
+  end
+  
+  def test_title_should_show_private_page_if_title_found_and_authenticated
+    get :title, { :id => 'some-personal-data' }, { :admin => true }
+
+    assert_template 'title'
+    assert_response :success
+    assert_equal 'Some Personal Data', assigns(:page_title)
+    assert_equal '<p>My credit card number is 123456</p>', assigns(:page_body)
+    assert_equal pages(:private), assigns(:page)
+  end
+  
   def test_show_should_redirect_to_title_and_keep_flash
     flash_hash = ActionController::Flash::FlashHash.new
     flash_hash.now[:par1] = 'val1'

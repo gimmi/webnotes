@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
   def create
     if login(params[:password])
       flash[:notice] = 'Succesfully logged in.'
-      redirect_to flash[:original_uri]
+      redirect_to flash[:original_uri] || ''
     else
       flash[:error] = 'Wrong password.'
       flash.keep :original_uri

@@ -1,6 +1,8 @@
-<h1>Pages</h1>
-<ul>
-  <% for page in @pages %>
-    <li><%= link_to page.title, page %></li>
-  <% end %>
-</ul>
+<div id="content">
+  <h1>Pages</h1>
+  <ul>
+    <% for page in @pages %>
+      <li><%= link_to page.title, page %></li>
+    <% end %>
+  </ul>
+</div>

@@ -15,6 +15,11 @@ body
     font-family:verdana;
 }
 
+ul
+{
+    margin-left: 1.5em;
+}
+
 #outer
 {
     padding:0em 1.5em 0em 1.5em;
@@ -30,6 +35,7 @@ body
     list-style-image:none;
     list-style-position:outside;
     list-style-type:none;
+    margin-left: 0em;
 }
 
 #menu li 
@@ -93,7 +99,8 @@ body
 
 #content *
 {
-    margin: 1em 0em;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 
 #content br /* Firefox bug? */
@@ -107,17 +114,11 @@ body
     background: #F3F3F3;
 }
 
-#content ul
-{
-    margin-left:1.5em;
-}
-
 /* page edit */
 
 #edit
 {
-    margin-top: 2em;
-    margin-bottom: 2em;
+    margin: 1em 0em;
 }
 
 #edit .title
@@ -143,7 +144,10 @@ body
 
 #errors
 {
+    margin: 1em 0em;
     color: red;
 }
+
+#errors li
 
 

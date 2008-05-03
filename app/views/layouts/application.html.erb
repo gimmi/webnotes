@@ -21,6 +21,8 @@
           <% end %>
           <% if admin? %>
             <li><%= link_to('Log out', { :controller => 'sessions', :action => 'delete' }, :method => :delete) %></li>
+          <%else%>
+            <li><%= link_to('Log in', new_session_path, :method => :get) %></li>
           <% end %>
         </ul>
       </div>
@@ -34,9 +36,7 @@
           <% end %>
         </div>
       <% end %>
-      <div id="content">
-        <%= yield  %>
-      </div>
+      <%= yield  %>
       <div id="footer">
         <hr />
         <p>Made with <a href="http://github.com/gimmi/webnotes">WebNotes</a></p>

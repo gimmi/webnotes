@@ -79,4 +79,11 @@ class PageTest < ActiveSupport::TestCase
     assert_equal "Hi <a href=\"http://link/home-page\">Home Page</a>", Page.new(:text_body => 'Hi [[home-page]]').text_body_with_page_links{ |url_title| 'http://link/' + url_title }
   end
   
+  def test_private
+    page = Page.new
+    page.public=true
+    assert !page.private?
+    page.public=false
+    assert page.private?
+  end
 end
