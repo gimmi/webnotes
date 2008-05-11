@@ -6,9 +6,8 @@
 
 <% for file_resource in @file_resources %>
   <tr>
-    <td><%= link_to 'Show', file_resource %></td>
-    <td><%= link_to 'Edit', edit_file_resource_path(file_resource) %></td>
-    <td><%= link_to 'Destroy', file_resource, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to file_resource.name, file_resource.path %></td>
+    <td><%= link_to 'Destroy', :controller => 'file_resources', :action => 'destroy', :method => :delete, :confirm => 'Are you sure?' %></td>
   </tr>
 <% end %>
 </table>

@@ -1,14 +1,18 @@
 class FileResource
-  BASE_PATH = 'public/files'
+  PUBLIC_PATH = 'files'
+  BASE_PATH = "#{RAILS_ROOT}/public/#{PUBLIC_PATH}"
 
-  def self.find
-    file_list = []
+  def self.find(name)
+    found = []
     Dir.foreach(BASE_PATH) do |file_name|
-      if File.file?(File.join(BASE_PATH, file_name))
-        file_list << FileResource.new(file_name)
+      file_path = File.join(BASE_PATH, file_name)
+      if File.file?(file_path) && file_name !~ /\A\./
+        file_resource = FileResource.new(file_name)
+        return file_resource if file_resource.name == name
+        found << file_resource
       end
     end
-    file_list.sort
+    name == :all ? found.sort : nil
   end
   
   def initialize(name)
@@ -22,6 +26,14 @@ class FileResource
     File.open(full_name, 'wb') do |file|
       file.write content
     end
+  end
+  
+  def path
+    PUBLIC_PATH + @name
+  end
+  
+  def <=>(other)
+    self.name <=> other.name
   end
   
 end
