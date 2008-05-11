@@ -1,0 +1,12 @@
+<h1>Editing file_resource</h1>
+
+<%= error_messages_for :file_resource %>
+
+<% form_for(@file_resource) do |f| %>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @file_resource %> |
+<%= link_to 'Back', file_resources_path %>

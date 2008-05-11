@@ -1,0 +1,18 @@
+<h1>Listing file_resources</h1>
+
+<table>
+  <tr>
+  </tr>
+
+<% for file_resource in @file_resources %>
+  <tr>
+    <td><%= link_to 'Show', file_resource %></td>
+    <td><%= link_to 'Edit', edit_file_resource_path(file_resource) %></td>
+    <td><%= link_to 'Destroy', file_resource, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New file_resource', new_file_resource_path %>

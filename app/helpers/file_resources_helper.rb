@@ -1,0 +1,2 @@
+module FileResourcesHelper
+end
