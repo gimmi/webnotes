@@ -23,6 +23,7 @@ class FileResource
   
   def write(content)
     full_name = File.join(BASE_PATH, @name)
+    raise "FileResource #{@name} already exists" if File.exists?(full_name)
     File.open(full_name, 'wb') do |file|
       file.write content
     end
