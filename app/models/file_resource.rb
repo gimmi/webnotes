@@ -1,6 +1,6 @@
 class FileResource
-  PUBLIC_PATH = 'files'
-  BASE_PATH = "#{RAILS_ROOT}/public/#{PUBLIC_PATH}"
+  PUBLIC_PATH = '/files'
+  BASE_PATH = "#{RAILS_ROOT}/public#{PUBLIC_PATH}"
 
   def self.find(name)
     found = []
@@ -15,22 +15,28 @@ class FileResource
     name == :all ? found.sort : nil
   end
   
+  def self.create(name, content)
+    full_name = File.join(BASE_PATH, name)
+    raise "FileResource #{name} already exists" if File.exists?(full_name)
+    File.open(full_name, 'wb') do |file|
+      file.write content
+    end
+  end
+  
+  def self.delete(name)
+    full_name = File.join(BASE_PATH, name)
+    raise "FileResource #{name} doesn't exists" unless File.exists?(full_name)
+    File.delete(full_name)
+  end
+  
   def initialize(name)
     @name = name
   end
 
   attr_reader :name
   
-  def write(content)
-    full_name = File.join(BASE_PATH, @name)
-    raise "FileResource #{@name} already exists" if File.exists?(full_name)
-    File.open(full_name, 'wb') do |file|
-      file.write content
-    end
-  end
-  
   def path
-    PUBLIC_PATH + @name
+    File.join(PUBLIC_PATH, @name)
   end
   
   def <=>(other)

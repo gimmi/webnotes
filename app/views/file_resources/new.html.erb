@@ -1,10 +1,11 @@
 <h1>New file_resource</h1>
 
-<%= error_messages_for :file_resource %>
-
-<% form_for(@file_resource) do |f| %>
+<% form_tag(file_resources_path, :multipart => true) do %>
   <p>
-    <%= f.submit "Create" %>
+    <%= file_field_tag :file %>
+  </p>
+  <p>
+    <%= submit_tag "Upload" %>
   </p>
 <% end %>
 
