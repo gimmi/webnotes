@@ -1,0 +1,9 @@
+<h1>File Resources</h1>
+
+<ul>
+  <% for attachment in @attachments %>
+    <li><%= link_to attachment.name, attachment.path %> - <%= link_to 'Destroy', { :controller => 'attachments', :action => 'destroy', :id => attachment.name }, :method => :delete, :confirm => 'Are you sure?' %></li>
+  <% end %>
+</ul>
+
+<%= link_to 'New attachment', new_attachment_path %>

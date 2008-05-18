@@ -1,8 +1,0 @@
-<h1>File Resources</h1>
-<ul>
-  <% for file_resource in @file_resources %>
-    <li><%= link_to file_resource.name, file_resource.path %> - <%= link_to 'Destroy', { :controller => 'file_resources', :action => 'destroy', :id => file_resource.name }, :method => :delete, :confirm => 'Are you sure?' %></li>
-  <% end %>
-</ul>
-
-<%= link_to 'New file_resource', new_file_resource_path %>

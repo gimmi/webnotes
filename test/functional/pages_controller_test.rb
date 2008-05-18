@@ -80,15 +80,13 @@ class PagesControllerTest < ActionController::TestCase
   end
   
   def test_show_should_redirect_to_title_and_keep_flash
-    flash_hash = ActionController::Flash::FlashHash.new
-    flash_hash.now[:par1] = 'val1'
-    flash_hash.now[:par2] = 'val2'
-    
-    get :show, { :id => pages(:correct).id }, { :flash => flash_hash }
+    get :show, { :id => pages(:correct).id }, { }, { :par1 => 'val1', :par2 => 'val2'}
 
     assert_redirected_to :action => 'title', :id => 'correct-page'
-    assert_not_nil flash[:par1]
-    assert_not_nil flash[:par2]
+
+    flash.sweep # to set the flash as it is available to the next action
+    assert_not_nil flash[:par1], 'par1'
+    assert_not_nil flash[:par2], 'par2'
   end
   
   def test_new_should_get_new
@@ -110,14 +108,16 @@ class PagesControllerTest < ActionController::TestCase
   def test_should_create_page
     pages(:correct).destroy
     assert_difference('Page.count') do
-      post :create, { :page => pages(:correct).attributes(:except => [ :id, :updated_at, :created_at ]) }, { :admin => true }
+      #post :create, { :page => pages(:correct).attributes(:except => [ :id, :updated_at, :created_at ]) }, { :admin => true }
+      post :create, { :page => pages(:correct).attributes.except(:id, :updated_at, :created_at ) }, { :admin => true }
     end
     assert_redirected_to page_path(assigns(:page))
     assert_equal 'Page was successfully created.', flash[:notice]
   end
 
   def test_create_should_redirect_to_edit_page_in_case_of_save_error
-    post :create, { :page => pages(:invalid).attributes(:except => [ :id, :updated_at, :created_at ]) }, { :admin => true }
+    #post :create, { :page => pages(:invalid).attributes(:except => [ :id, :updated_at, :created_at ]) }, { :admin => true }
+    post :create, { :page => pages(:invalid).attributes.except( :id, :updated_at, :created_at ) }, { :admin => true }
     
     assert_template 'edit'
     assert !assigns(:page).valid?

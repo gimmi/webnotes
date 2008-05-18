@@ -1,4 +1,4 @@
-class FileResource
+class Attachment
   PUBLIC_PATH = '/files'
   BASE_PATH = "#{RAILS_ROOT}/public#{PUBLIC_PATH}"
 
@@ -7,9 +7,9 @@ class FileResource
     Dir.foreach(BASE_PATH) do |file_name|
       file_path = File.join(BASE_PATH, file_name)
       if File.file?(file_path) && file_name !~ /\A\./
-        file_resource = FileResource.new(file_name)
-        return file_resource if file_resource.name == name
-        found << file_resource
+        attachment = Attachment.new(file_name)
+        return attachment if attachment.name == name
+        found << attachment
       end
     end
     name == :all ? found.sort : nil
@@ -17,16 +17,23 @@ class FileResource
   
   def self.create(name, content)
     full_name = File.join(BASE_PATH, name)
-    raise "FileResource #{name} already exists" if File.exists?(full_name)
+    raise "Attachment #{name} already exists" if File.exists?(full_name)
+    
     File.open(full_name, 'wb') do |file|
       file.write content
     end
   end
   
   def self.delete(name)
-    full_name = File.join(BASE_PATH, name)
-    raise "FileResource #{name} doesn't exists" unless File.exists?(full_name)
-    File.delete(full_name)
+    if name == :all
+      Dir.foreach(BASE_PATH) do |file_name|
+        File.delete(File.join(BASE_PATH, file_name)) unless file_name =~ /\A\./
+      end
+    else
+      full_name = File.join(BASE_PATH, name)
+      raise "Attachment #{name} doesn't exists" unless File.exists?(full_name)
+      File.delete(full_name)
+    end
   end
   
   def initialize(name)
