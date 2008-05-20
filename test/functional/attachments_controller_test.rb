@@ -3,12 +3,12 @@ require File.dirname(__FILE__) + '/../test_helper'
 class AttachmentsControllerTest < ActionController::TestCase
   
   def setup
-    Attachment.create('image.jpg', 'an image here')
-    Attachment.create('document.pdf', 'a document here')
+    Attachment.new('image.jpg').write('an image here')
+    Attachment.new('document.pdf').write('a document here')
   end
   
   def teardown
-    Attachment.delete(:all)
+    Attachment.delete_all
   end
   
   def test_index_should_load_all_attachments
@@ -43,7 +43,7 @@ class AttachmentsControllerTest < ActionController::TestCase
     post :create, :file => file
 
     assert_redirected_to attachments_path
-    assert_equal 'Attachment image.jpg already exists', flash[:error]
+    assert_equal 'Attachment image already exists', flash[:error]
   end
   
   def test_destroy_should_delete_attachment_and_redirect_to_attachments_path
@@ -52,12 +52,5 @@ class AttachmentsControllerTest < ActionController::TestCase
     assert_redirected_to attachments_path
     assert_equal 'Attachment successfully delete.', flash[:notice]
     assert_equal 1, Attachment.find(:all).length
-  end
-
-  def test_destroy_should_redirect_to_attachments_path_and_display_erro_when_cant_delete_attachment
-    delete :destroy, { :id => 'file-that-doesnt-exists'}
-    
-    assert_redirected_to attachments_path
-    assert_equal "Attachment file-that-doesnt-exists doesn't exists", flash[:error]
   end
 end
