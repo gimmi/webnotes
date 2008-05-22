@@ -35,4 +35,10 @@ class Test::Unit::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+  def assert_login_redirect
+    assert_redirected_to new_session_path
+    assert_equal 'Password needed.', flash[:notice]
+    assert_not_nil flash[:original_uri]
+  end
+
 end

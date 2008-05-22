@@ -19,6 +19,7 @@
             <li><%= link_to 'Edit page', edit_page_path(@page), :method => :get %></li>
             <li><%= link_to 'Delete page', page_path(@page), :confirm => 'Are you sure?', :method => :delete %></li>
           <% end %>
+          <li><%= link_to('Attachment list', attachments_path) %></li>
           <% if admin? %>
             <li><%= link_to('Log out', { :controller => 'sessions', :action => 'delete' }, :method => :delete) %></li>
           <%else%>

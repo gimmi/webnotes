@@ -4,12 +4,6 @@ class PagesControllerTest < ActionController::TestCase
   
   fixtures :pages
   
-  def assert_login_redirect
-    assert_redirected_to new_session_path
-    assert_equal 'Password needed.', flash[:notice]
-    assert_not_nil flash[:original_uri]
-  end
-  
   def test_should_redirect_to_new_session_when_requesting_admin_actions
     get :new
     assert_login_redirect

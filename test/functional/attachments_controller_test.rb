@@ -11,8 +11,22 @@ class AttachmentsControllerTest < ActionController::TestCase
     Attachment.delete_all
   end
   
-  def test_index_should_load_all_attachments
+  def test_should_redirect_to_new_session_when_requesting_admin_actions
     get :index
+    assert_login_redirect
+
+    get :new
+    assert_login_redirect
+    
+    post :create
+    assert_login_redirect
+    
+    delete :destroy
+    assert_login_redirect
+  end
+  
+  def test_index_should_load_all_attachments
+    get :index, nil, { :admin => true }
 
     assert_response :success
 
@@ -21,7 +35,7 @@ class AttachmentsControllerTest < ActionController::TestCase
   end
 
   def test_new_should_render_new_template
-    get :new
+    get :new, nil, { :admin => true }
 
     assert_response :success
     assert_template 'new'
@@ -30,7 +44,7 @@ class AttachmentsControllerTest < ActionController::TestCase
   def test_create_should_create_attachment_and_redirect_to_attachment_path
     file = stub('stub_file', :original_filename => 'name', :read => 'content')
 
-    post :create, :file => file
+    post :create, { :file => file }, { :admin => true }
 
     assert_redirected_to attachments_path
     assert_equal 'Attachment successfully created.', flash[:notice]
@@ -40,14 +54,14 @@ class AttachmentsControllerTest < ActionController::TestCase
   def test_create_should_redirect_to_attachment_path_and_display_error_when_cant_create_attachment
     file = stub('stub_file', :original_filename => 'image.jpg', :read => 'content')
 
-    post :create, :file => file
+    post :create, { :file => file }, { :admin => true }
 
     assert_redirected_to attachments_path
     assert_equal 'Attachment image already exists', flash[:error]
   end
   
   def test_destroy_should_delete_attachment_and_redirect_to_attachments_path
-    delete :destroy, { :id => 'image.jpg'}
+    delete :destroy, { :id => 'image.jpg'}, { :admin => true }
     
     assert_redirected_to attachments_path
     assert_equal 'Attachment successfully delete.', flash[:notice]

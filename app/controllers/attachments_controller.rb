@@ -1,4 +1,7 @@
 class AttachmentsController < ApplicationController
+  
+  before_filter :authorize
+
   # GET /attachments
   def index
     @attachments = Attachment.find(:all)
