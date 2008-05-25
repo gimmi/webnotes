@@ -14,7 +14,8 @@ class AttachmentsController < ApplicationController
   # POST /attachments
   def create
     begin
-      Attachment.new(params[:file].original_filename).write(params[:file].read)
+      attachment = Attachment.new(params[:file].original_filename)
+      attachment.write(params[:file].read)
     rescue RuntimeError => err
       flash[:error] = err.message
     else
@@ -25,8 +26,14 @@ class AttachmentsController < ApplicationController
 
   # DELETE /file_resources/1
   def destroy
-    Attachment.new(params[:id]).delete
-    flash[:notice] = 'Attachment successfully delete.'
+    name = params[:id]
+    attachment = Attachment.find(name)
+    if attachment
+      attachment.delete
+      flash[:notice] = 'Attachment successfully delete.'
+    else
+      flash[:error] = "Attachment '#{name}' not found."
+    end
     redirect_to attachments_path
   end
 end

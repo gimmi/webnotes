@@ -15,11 +15,12 @@ class AttachmentTest < ActiveSupport::TestCase
     Attachment.new('another-file.txt').write('content of another file')
     attachment = Attachment.find('another-file')
     assert_equal 'another-file', attachment.name
+    assert_nil Attachment.find('non-present-file')
   end
   
-  def test_split_file_name
-    assert_equal ['i-m-a12-js--', '.jpg'], Attachment.split_file_name('i m_a12?js[].jpg')
-    assert_equal ['image', ''], Attachment.split_file_name('image')
+  def test_split_and_normalize_file_name
+    assert_equal ['i-m-a12-js--', '.jpg'], Attachment.split_and_normalize_file_name('i m_a12?JS[].jpg')
+    assert_equal ['image', ''], Attachment.split_and_normalize_file_name('image')
   end
   
   def test_delete_should_delete_file_if_file_exists
@@ -27,8 +28,7 @@ class AttachmentTest < ActiveSupport::TestCase
     attachment.write('some content')
     attachment.delete
 
-    full_path = File.join(Attachment::BASE_PATH, 'name.jpg')
-    assert !File.exist?(full_path)
+    assert !File.exist?(File.join(Attachment::BASE_PATH, 'name.jpg'))
   end
   
   def test_write_should_create_file
@@ -36,8 +36,8 @@ class AttachmentTest < ActiveSupport::TestCase
     attachment.write('some content')
     
     full_path = File.join(Attachment::BASE_PATH, 'name.txt')
-    assert File.exist?(full_path), 'file not created'
-    assert_equal 'some content', IO.read(full_path), "file content doesn't mach"
+    assert File.exist?(full_path)
+    assert_equal 'some content', IO.read(full_path)
   end
   
   def test_write_should_throw_exception_if_file_exists

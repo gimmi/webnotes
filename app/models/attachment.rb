@@ -1,5 +1,5 @@
 class Attachment
-  PUBLIC_PATH = '/files'
+  PUBLIC_PATH = '/attachments'
   BASE_PATH = "#{RAILS_ROOT}/public#{PUBLIC_PATH}"
 
   def self.each
@@ -20,13 +20,14 @@ class Attachment
     name == :all ? found.sort : nil
   end
   
-  def self.split_file_name(file_name)
-    type_index = file_name.index(/\.[a-z0-9]+\z/)
+  def self.split_and_normalize_file_name(file_name)
+    lowercased_file_name = file_name.downcase
+    type_index = lowercased_file_name.index(/\.[a-z0-9]+\z/)
     if type_index
-      name = file_name[0, type_index]
-      type = file_name[type_index, file_name.length]
+      name = lowercased_file_name[0, type_index]
+      type = lowercased_file_name[type_index, lowercased_file_name.length]
     else
-      name = file_name
+      name = lowercased_file_name
       type = ''
     end
     [name.gsub(/[^a-z0-9]/, '-'), type]
@@ -45,7 +46,7 @@ class Attachment
   end
   
   def name
-    Attachment.split_file_name(@file_name)[0]
+    Attachment.split_and_normalize_file_name(@file_name)[0]
   end
   
   def path
@@ -56,7 +57,7 @@ class Attachment
     Attachment.each do |attachment|
       raise "Attachment #{name} already exists" if self == attachment
     end
-    File.open(File.join(BASE_PATH, @file_name), 'wb') do |file|
+    File.open(File.join(BASE_PATH, Attachment.split_and_normalize_file_name(@file_name).join), 'wb') do |file|
       file.write content
     end
   end
