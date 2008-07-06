@@ -86,4 +86,24 @@ class PageTest < ActiveSupport::TestCase
     page.public=false
     assert page.private?
   end
+  
+  def test_update_attributes_with_versioning
+    page = pages(:correct)
+    version_count = page.page_versions.size
+    page.update_attributes_with_versioning(:public => !page.public)
+    assert_equal version_count, page.page_versions.size, 'should not add a version when changing non versioned fields'
+
+    original_updated_at = page.updated_at
+    original_text_body = page.text_body
+    changed_text_body = page.text_body + ' changed'
+    page.update_attributes_with_versioning(:text_body => changed_text_body)
+    assert page.updated_at > original_updated_at, 'should change updated_at field'
+    assert_equal changed_text_body, page.text_body, 'should update text_body field'
+    assert_equal version_count + 1, page.page_versions.size, 'should create a new page version'
+    
+    version = page.page_versions.find(:first, :order => 'version_at DESC')
+    assert_equal original_updated_at.to_s, version.version_at.to_s, "page version should have version_at like page's updated_at before saving"
+    assert_equal original_text_body, version.text_body, "page verison should have text_body field like page's text_body field before updating"
+    
+  end
 end

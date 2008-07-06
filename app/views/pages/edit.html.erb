@@ -3,6 +3,8 @@
   <% form_for(@page) do |f| %>
     <%= f.text_field :url_title, :class => 'title' %>
     <%= f.text_area :text_body, :class => 'body', :onkeyup => 'resizeTextArea(this)' %>
-    <%= f.submit "Save", :class => 'save' %> <%= f.check_box :public %>This page is viewable by everyone<br />
+    <%= f.submit "Save", :class => 'save' %> 
+    <%= f.submit "Save minor change", :class => 'save' %> 
+    <%= f.check_box :public %>This page is viewable by everyone<br />
   <% end %>
 </div>

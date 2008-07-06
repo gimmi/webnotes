@@ -59,7 +59,7 @@ class PagesController < ApplicationController
   def update
     @page = Page.find(params[:id])
 
-    if @page.update_attributes(params[:page])
+    if @page.update_attributes_with_versioning(params[:page])
       flash[:notice] = 'Page was successfully updated.'
       redirect_to(@page)
     else
