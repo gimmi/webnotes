@@ -48,14 +48,14 @@ class PageTest < ActiveSupport::TestCase
     assert !page.save
   end
 
-#  def test_html_body
-#    page = Page.new(:text_body => 'Hi')
-#    blue_cloth = mock()
-#    BlueCloth.expects(:new).with(page.text_body).returns(blue_cloth)
-#    blue_cloth.expects(:to_html).returns('html')
-#    
-#    assert_equal 'html', page.html_body('')
-#  end
+  #  def test_html_body
+  #    page = Page.new(:text_body => 'Hi')
+  #    blue_cloth = mock()
+  #    BlueCloth.expects(:new).with(page.text_body).returns(blue_cloth)
+  #    blue_cloth.expects(:to_html).returns('html')
+  #    
+  #    assert_equal 'html', page.html_body('')
+  #  end
   
   def test_html_body
     page = Page.new(:text_body => '**Hello [[page-link]] World!**')
@@ -104,6 +104,26 @@ class PageTest < ActiveSupport::TestCase
     version = page.page_versions.find(:first, :order => 'version_at DESC')
     assert_equal original_updated_at.to_s, version.version_at.to_s, "page version should have version_at like page's updated_at before saving"
     assert_equal original_text_body, version.text_body, "page verison should have text_body field like page's text_body field before updating"
-    
+  end
+  
+  def test_text_body_compared_with
+    page = Page.new
+    page_version = PageVersion.new
+
+    page.text_body = "row 1\nrow 2\nrow 3"
+    page_version.text_body = "row 1\nrow 2\nrow 3"
+    compare = ''
+    page.text_body_compared_with(page_version) do |diff, text|
+      compare += "#{diff}#{text} "
+    end
+    assert_equal '=row 1 =row 2 =row 3 ', compare
+
+    page.text_body = "row 1\nROW2\nrow 3"
+    page_version.text_body = "row 1\nrow 2\nrow 3"
+    compare = ''
+    page.text_body_compared_with(page_version) do |diff, text|
+      compare += "#{diff}#{text} "
+    end
+    assert_equal '=row 1 -row 2 +ROW2 =row 3 ', compare
   end
 end

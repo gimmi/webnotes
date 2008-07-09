@@ -1,4 +1,5 @@
 require 'bluecloth'
+require 'diff/lcs'
 
 class Page < ActiveRecord::Base
   has_many :page_versions
@@ -36,5 +37,17 @@ class Page < ActiveRecord::Base
     self.attributes = attributes
     page_versions.build(:text_body => text_body_was, :version_at => read_attribute(:updated_at)) if text_body_changed?
     save
+  end
+  
+  def text_body_compared_with(page_version)
+    Diff::LCS.traverse_sequences(page_version.text_body.split($/), read_attribute(:text_body).split($/)) do |event|
+      text = case event.action
+      when '+' then event.new_element
+      when '-' then event.old_element
+      when '=' then event.old_element
+      end
+      raise "Unknown diff action #{event.action}" if !text
+      yield event.action, text
+    end
   end
 end
