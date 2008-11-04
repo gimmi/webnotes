@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  before_filter :authorize, :except => [:index, :title, :show]
+  before_filter :authorize, :except => [:index, :title, :show, :history]
   
   # GET /pages
   def index
@@ -73,6 +73,11 @@ class PagesController < ApplicationController
     @page.destroy
 
     redirect_to(pages_url)
+  end
+  
+  # GET /pages/1/history
+  def history
+    @page = Page.find(params[:id])
   end
   
 #  private

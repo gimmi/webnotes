@@ -40,14 +40,15 @@ class Page < ActiveRecord::Base
   end
   
   def text_body_compared_with(page_version)
-    Diff::LCS.traverse_sequences(page_version.text_body.split($/), read_attribute(:text_body).split($/)) do |event|
-      text = case event.action
+    text_body_splitted = read_attribute(:text_body).split($/)
+    reference_text_body_splitted = page_version.text_body.split($/)
+    Diff::LCS.traverse_sequences(reference_text_body_splitted, text_body_splitted) do |event|
+      yield event.action, case event.action
       when '+' then event.new_element
       when '-' then event.old_element
       when '=' then event.old_element
+      else raise "Unknown diff action #{event.action}"
       end
-      raise "Unknown diff action #{event.action}" if !text
-      yield event.action, text
     end
   end
 end

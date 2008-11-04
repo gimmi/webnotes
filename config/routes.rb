@@ -6,7 +6,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :sessions
 
-  map.resources :pages, :collection => { :title => :get }
+  map.resources :pages, :collection => { :title => :get }, :member => { :history => :get }
 
   # The priority is based upon order of creation: first created -> highest priority.
 

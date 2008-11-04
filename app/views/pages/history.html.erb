@@ -1,0 +1,4 @@
+<%  form_tag history_page_path do %>
+  <%= select_tag 'reference', options_for_select(@page.page_versions.collect { |v| [v.to_s, v.id] }, @currently_selected_version) %>
+  <%= submit_tag 'Show differences' %>
+<% end %>
